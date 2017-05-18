@@ -143,5 +143,25 @@ namespace WeText.Web.Controllers
                 });
             }
         }
+
+        public async Task<ActionResult> Reject(Guid invitationId)
+        {
+            var userId = User.Identity.GetUserId();
+            using (var proxy = new ServiceProxy(baseAddress))
+            {
+                var result = await proxy.PostAsJsonAsync("api/social/invitation/reject", new
+                {
+                    CurrentUserId = userId,
+                    InvitationId = invitationId
+                });
+                return RedirectToAction("Info", "Home", new
+                {
+                    MessageTitle = "Success!",
+                    MessageText = "Rejection has been sent successfully.",
+                    ReturnAction = "Index",
+                    ReturnController = "MyFriend"
+                });
+            }
+        }
     }
 }
